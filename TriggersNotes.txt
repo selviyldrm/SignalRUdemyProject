@@ -1,0 +1,39 @@
+Triggers
+
+  
+Create trigger IncreaseOrderTotalPrice /* tetikleyici oluþturma */
+on OrderDetails /*Order detail tablosu üzerinde çalýþacak*/
+after Insert /*ekleme yapýnca*/
+as
+Declare @OrderID int
+Declare @OrderPrice decimal
+Select @OrderID=OrderID from inserted
+Select @OrderPrice=TotalPrice from inserted
+Update Orders Set TotalPrice=TotalPrice+@OrderPrice where OrderID=@OrderID
+
+-----------------------------------------------------------------------------------
+
+--Create Trigger DecreaseOrderTotalPrice /* tetikleyici oluþturma */
+--on OrderDetails /*Order detail tablosu üzerinde çalýþacak*/
+--after Delete /*silme yapýnca*/
+--as
+--Declare @OrderID int
+--Declare @OrderPrice decimal
+--Select @OrderID=OrderID from deleted
+--Select @OrderPrice=TotalPrice from deleted
+--Update Orders Set TotalPrice=TotalPrice - @OrderPrice where OrderID=@OrderID
+
+-----------------------------------------------------------------------------------
+
+Create Trigger SumMoneyCases
+On Orders
+After Update
+As
+Declare @Description Nvarchar(Max)
+Declare @TotalPrice Decimal(18,2)
+Select @Description=Description From inserted
+Select @TotalPrice=TotalPrice From inserted 
+if(@Description='Hesap Kapatýldý')
+Begin
+Update MoneyCases Set TotalAmount=TotalAmount+@TotalPrice
+End
