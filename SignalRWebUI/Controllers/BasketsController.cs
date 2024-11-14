@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SignalR.DataAccessLayer.Concrete;
 using SignalRApi.Models;
 using SignalRWebUI.Dtos.BasketDtos;
+using System.Text;
 
 namespace SignalRWebUI.Controllers
 {
@@ -27,7 +28,15 @@ namespace SignalRWebUI.Controllers
             }
             return View();
         }
-
+        public async Task<IActionResult> DeleteBasket(int id) {
+        var client= _httpClientFactory.CreateClient();
+            var responseMessage = await client.DeleteAsync($"https://localhost:7218/api/Basket/{id}");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return NoContent();
+        }
         
     }
 }
