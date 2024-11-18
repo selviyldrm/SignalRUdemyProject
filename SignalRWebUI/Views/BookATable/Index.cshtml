@@ -1,0 +1,107 @@
+﻿@model CreateBookingDto
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+@await Component.InvokeAsync("_UILayoutHeadComponentPartial")
+<body class="sub_page">
+
+    @await Component.InvokeAsync("_MenuNavbarComponentPartial")
+
+    <section class="book_section layout_padding">
+        <div class="container">
+            <div class="heading_container">
+                <h2>
+                    Rezervasyon Oluştur
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form_container">
+                        <form method="post">
+                            <div>
+                                <input type="text" id="Name" class="form-control" placeholder="Adınız Soyadınız" asp-for="Name" />
+                            </div>
+                            <div>
+                                <input type="text" id="Phone" class="form-control" placeholder="Telefon Numaranız" asp-for="Phone" />
+                            </div>
+                            <div>
+                                <input type="email" id="Mail" class="form-control" placeholder="Mail Adresiniz" asp-for="Mail" />
+                            </div>
+                            <div>
+                                <select asp-for="PersonCount" id="PersonCount" class="form-control nice-select wide">
+                                    <option value="" disabled selected>
+                                        Kişi Sayısı?
+                                    </option>
+                                    <option value="1">
+                                        1
+                                    </option>
+                                    <option value="2">
+                                        2
+                                    </option>
+                                    <option value="3">
+                                        3
+                                    </option>
+                                    <option value="4">
+                                        4
+                                    </option>
+                                    <option value="5">
+                                        5
+                                    </option>
+                                    <option value="6">
+                                        6++
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="date" id="Date" class="form-control" asp-for="Date">
+                            </div>
+                            <div class="btn_box">
+                                <button id="btnbookingadd">
+                                    Yerinizi Ayırtın
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="map_container ">
+                        <div id="googleMap"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @await Component.InvokeAsync("_UILayoutFooterComponentPartial")
+
+    @await Component.InvokeAsync("_UILayoutScriptComponentPartial")
+
+    <script>
+        $("#btnbookingadd").click(function () {
+
+            let bookingvalues = {
+                Name: $("#Name").val(),
+                Phone: $("#Phone").val(),
+                Mail: $("#Mail").val(),
+                PeopleCount: $("#PeopleCount").val(),
+                Date: $("#Date").val(),
+            }
+
+            $.ajax(){
+                type: "post",
+                url: "/Booking/CreateBooking/",
+                data: "bookingvalues",
+                success:function(func){
+                    let result=jQuery.parseJSON(func);
+                    swal("Tebrikler", "Rezervasyon oluşturuldu.", "success");
+                }
+             }
+        })
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>
